@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Optional: Link to a CSS file for styling -->
+</head>
+<body>
+    <div id="popup-container">
+        <h1>My Chrome Extension</h1>
+
+        <section id="settings-section">
+            <h2>Settings</h2>
+            <form id="popup-form">
+                <input id="settings-input" type="text" placeholder="Enter a setting" />
+                <button type="submit">Save</button>
+            </form>
+        </section>
+
+        <section id="open-pdf-section">
+            <h2>Abrir PDF</h2>
+            <input id="pdf-input" type="file" accept="application/pdf" />
+            <button id="open-pdf-button">Abrir PDF no Chrome</button>
+            <p id="pdf-hint">Selecione um arquivo PDF local e clique em "Abrir PDF no Chrome".</p>
+        </section>
+    </div>
+    <script type="module" src="../../dist/popup/popup.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pdfInput = document.getElementById('pdf-input');
+            const openPdfButton = document.getElementById('open-pdf-button');
+            if (!openPdfButton || !pdfInput)
+                return;
+            openPdfButton.addEventListener('click', function () {
+                const files = pdfInput.files;
+                if (!files || files.length === 0) {
+                    alert('Selecione um arquivo PDF.');
+                    return;
+                }
+                const file = files[0];
+                if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                    alert('Por favor selecione um arquivo PDF.');
+                    return;
+                }
+                const blobUrl = URL.createObjectURL(file);
+                try {
+                    chrome.tabs.create({ url: blobUrl }, function () {
+                        window.close();
+                    });
+                }
+                catch (e) {
+                    window.open(blobUrl, '_blank');
+                    window.close();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
