@@ -47,7 +47,7 @@ if (popupForm && settingsInput) {
     });
 }
 if (openPdfButton && pdfInput) {
-    openPdfButton.addEventListener('click', () => {
+    const openSelectedPdf = () => {
         const files = pdfInput.files;
         if (!files || files.length === 0) {
             alert('Selecione um arquivo PDF.');
@@ -61,14 +61,14 @@ if (openPdfButton && pdfInput) {
         const blobUrl = URL.createObjectURL(file);
         try {
             chrome.tabs.create({ url: blobUrl }, () => {
-                // Close popup after opening
                 window.close();
             });
         }
         catch (e) {
-            // Fallback: open in same window
             window.open(blobUrl, '_blank');
             window.close();
         }
-    });
+    };
+    openPdfButton.addEventListener('click', openSelectedPdf);
+    pdfInput.addEventListener('change', openSelectedPdf);
 }

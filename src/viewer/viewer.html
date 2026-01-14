@@ -6,11 +6,24 @@
   <title>PDF Viewer</title>
   <style>
     html,body { height:100%; margin:0; }
-    #pdf-frame { width:100%; height:100%; border:0; }
+    #pdf-canvas { width:100%; height:100%; display:block; }
   </style>
-  <script type="module" src="viewer.js"></script>
-</head>
+  </head>
 <body>
-  <iframe id="pdf-frame" sandbox="allow-scripts allow-forms allow-same-origin"></iframe>
+  <div id="toolbar" style="display:flex; gap:8px; align-items:center; padding:8px; background:#f1f1f1;">
+    <button id="prev">Anterior</button>
+    <button id="next">Próxima</button>
+    <span>Página <span id="page-num">0</span> / <span id="page-count">0</span></span>
+    <button id="zoom-in">+</button>
+    <button id="zoom-out">-</button>
+  </div>
+  <div id="viewer-container" style="height:calc(100% - 48px);">
+    <canvas id="pdf-canvas"></canvas>
+  </div>
+
+  <!-- PDF.js library (bundled locally). Path is relative to extension root: viewer/viewer.html -->
+  <script src="../../node_modules/pdfjs-dist/build/pdf.js"></script>
+  <!-- Load compiled viewer script from dist -->
+  <script type="module" src="../../dist/viewer/viewer.js"></script>
 </body>
 </html>

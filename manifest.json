@@ -5,7 +5,12 @@
   "description": "A simple Chrome extension example.",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "contextMenus",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "dist/background.js",
@@ -21,5 +26,16 @@
     }
   ],
   "options_page": "src/options/options.html"
-  
+  ,
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "node_modules/pdfjs-dist/build/pdf.worker.mjs",
+        "node_modules/pdfjs-dist/build/pdf.js",
+        "dist/viewer/*",
+        "src/viewer/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
