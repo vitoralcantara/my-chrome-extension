@@ -88,6 +88,17 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx = canvas ? canvas.getContext('2d') : null;
     if (canvas) {
         canvas.width = canvas.clientWidth;
+        // Adiciona navegação por scroll do mouse
+        canvas.addEventListener('wheel', (event) => {
+            event.preventDefault();
+            if (event.deltaY > 0) {
+                // Scroll para baixo: próxima página
+                onNextPage();
+            } else if (event.deltaY < 0) {
+                // Scroll para cima: página anterior
+                onPrevPage();
+            }
+        });
     }
     // Agora carrega o PDF e renderiza
     chrome.storage.local.get([key], (res: any) => {
