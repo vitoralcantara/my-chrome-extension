@@ -41,6 +41,7 @@ let pdfDoc = null;
 let currentPage = 1;
 let pageRendering = false;
 let pageNumPending = null;
+let renderTask = null;
 let scale = 1.0;
 // storage key used for saving/loading last page for the currently opened document
 let currentStorageKey = null;
@@ -134,6 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 function queueRenderPage(pageNum) {
+    if (pageRendering) {
+        pageNumPending = pageNum;
+        return;
+    }
     pageRendering = true;
     if (!pdfDoc)
         return;
@@ -146,10 +151,19 @@ function queueRenderPage(pageNum) {
                 canvasContext: ctx,
                 viewport: viewport
             };
-            page.render(renderContext).promise.then(() => {
+            renderTask = page.render(renderContext);
+            renderTask.promise.then(() => {
                 pageRendering = false;
                 updatePageNum();
+                if (pageNumPending !== null && pageNumPending !== pageNum) {
+                    const next = pageNumPending;
+                    pageNumPending = null;
+                    queueRenderPage(next);
+                }
             });
+        }
+        else {
+            pageRendering = false;
         }
     });
     console.log('queueRenderPage called for page', pageNum);
