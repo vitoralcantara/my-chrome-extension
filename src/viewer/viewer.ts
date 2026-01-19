@@ -90,23 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (canvas) {
         canvas.width = canvas.clientWidth;
         // Adiciona navegação por scroll do mouse
+        const container = document.getElementById('viewer-container');
         canvas.addEventListener('wheel', (event) => {
-            event.preventDefault();
             if (event.ctrlKey) {
+                event.preventDefault();
                 // Zoom com Ctrl+scroll
                 if (event.deltaY < 0) {
                     onZoomIn();
                 } else if (event.deltaY > 0) {
                     onZoomOut();
                 }
-            } else {
-                if (event.deltaY > 0) {
-                    // Scroll para baixo: próxima página
+                return;
+            }
+            if (!container) return;
+            const atTop = container.scrollTop === 0;
+            const atBottom = Math.abs(container.scrollTop + container.clientHeight - container.scrollHeight) < 2;
+            if (event.deltaY > 0) {
+                // Scroll para baixo
+                if (atBottom) {
+                    event.preventDefault();
                     onNextPage();
-                } else if (event.deltaY < 0) {
-                    // Scroll para cima: página anterior
+                }
+                // Senão, deixa rolar normalmente
+            } else if (event.deltaY < 0) {
+                // Scroll para cima
+                if (atTop) {
+                    event.preventDefault();
                     onPrevPage();
                 }
+                // Senão, deixa rolar normalmente
             }
         });
     }
