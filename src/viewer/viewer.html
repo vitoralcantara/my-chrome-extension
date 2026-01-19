@@ -21,9 +21,8 @@
     <canvas id="pdf-canvas"></canvas>
   </div>
 
-  <!-- PDF.js library (bundled locally). Path is relative to extension root: viewer/viewer.html -->
-  <script src="../../node_modules/pdfjs-dist/build/pdf.js"></script>
-  <!-- Load compiled viewer script from dist -->
+  <!-- Carrega PDF.js antes do viewer.js -->
+  <script type="module" src="../../node_modules/pdfjs-dist/build/pdf.mjs"></script>
   <script type="module" src="../../dist/viewer/viewer.js"></script>
 </body>
 </html>

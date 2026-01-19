@@ -31,7 +31,7 @@
     {
       "resources": [
         "node_modules/pdfjs-dist/build/pdf.worker.mjs",
-        "node_modules/pdfjs-dist/build/pdf.js",
+        "node_modules/pdfjs-dist/build/pdf.mjs",
         "dist/viewer/*",
         "src/viewer/*"
       ],
