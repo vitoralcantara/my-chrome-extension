@@ -1,9 +1,15 @@
+function saveLastPage() {
+    if (currentStorageKey) {
+        chrome.storage.local.set({ [currentStorageKey]: currentPage });
+    }
+}
 function onPrevPage() {
     if (currentPage <= 1)
         return;
     currentPage--;
     queueRenderPage(currentPage);
     updatePageNum();
+    saveLastPage();
     console.log('onPrevPage clicado', { currentPage });
 }
 function onNextPage() {
@@ -12,6 +18,7 @@ function onNextPage() {
     currentPage++;
     queueRenderPage(currentPage);
     updatePageNum();
+    saveLastPage();
     console.log('onNextPage clicado', { currentPage });
 }
 function onZoomIn() {
@@ -178,6 +185,7 @@ function queueRenderPage(pageNum) {
             renderTask.promise.then(() => {
                 pageRendering = false;
                 updatePageNum();
+                saveLastPage();
                 if (pageNumPending !== null && pageNumPending !== pageNum) {
                     const next = pageNumPending;
                     pageNumPending = null;
